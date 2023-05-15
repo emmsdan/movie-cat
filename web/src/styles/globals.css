@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+
+  --white: rgb(255, 255, 255);
+  --yellow: rgb(220, 190, 0);
+  --gray: rgb(115, 115, 115);
+  --light-background: rgb(245, 245, 245);
+}
+* {
+    box-sizing: border-box;
+  font-family: Montserrat, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {}
