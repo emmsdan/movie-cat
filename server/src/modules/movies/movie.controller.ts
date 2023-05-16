@@ -13,6 +13,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import {PaginateDto} from "src/types/Paginate.dto";
 import { Movie } from './movie.entity';
 import { MovieService } from './movie.service';
 
@@ -21,8 +22,8 @@ export class MovieController {
   constructor(private movieService: MovieService) {}
 
   @Get()
-  findAll(): Promise<Movie[]> {
-    return this.movieService.findAll();
+  findAll(): Promise<PaginateDto<Movie>> {
+    return this.movieService.findAll({ limit: 20, page: 1 });
   }
 
   @Get(':id')
@@ -50,9 +51,10 @@ export class MovieController {
   ): any {
     return this.movieService.create({
       ...movie,
-      genre: JSON.stringify(movie.genre),
+      genre: JSON.stringify((movie as any).genres),
       poster: file.path,
-      meta: JSON.stringify({ movie, file }),
+      meta: JSON.stringify({ movie, file, id: Math.random() }),
+      rating: 0,
     });
   }
 }

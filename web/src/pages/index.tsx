@@ -2,6 +2,7 @@ import { Button } from "@/components/Button";
 import { Header } from "@/components/organism/header";
 import { MovieItem, MovieItemProps } from "@/components/molecule/Movie/Item";
 import { Modal } from "@/components/organism/Modal";
+import {imageLoader, onScroll} from "@/utils";
 import api from "@/utils/api";
 import * as React from "react";
 
@@ -14,30 +15,24 @@ export default function Home() {
   const [selectedItem, setSelectedItem] = React.useState<MovieItemProps | null>(null);
 
   const fetchMovies = React.useCallback(
-    async (page = 1) => {
+    async () => {
       if (currentPage > totalPages || loading) {
         return;
       }
       setLoading(true);
       const {data} = await api.get('/movies')
-      setMovies([...movies, ...data.results]);
-      setTotalPages(data.total_pages);
+      setMovies([...movies, ...data.result]);
+      setTotalPages(data.meta.total);
       setLoading(false);
     },
-    [loading]
+    [currentPage, loading]
   );
 
   React.useEffect(() => {
-    fetchMovies();
-    window.addEventListener("scroll", handleScroll);
+      onScroll(fetchMovies)
+      fetchMovies()
   }, []);
 
-  const handleScroll = () => {
-    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight - 110 && !loading) {
-      fetchMovies(currentPage + 1);
-    }
-  };
 
   return (
     <section className={"px-8"}>
@@ -66,7 +61,7 @@ export default function Home() {
             <div>
               <img
                 className="w-full h-60 object-cover object-top"
-                src={selectedItem?.poster}
+                src={imageLoader({ src: selectedItem.poster })}
                 alt="A Quiet Place movie poster"
               />
               <div className="p-4">

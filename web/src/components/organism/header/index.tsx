@@ -6,12 +6,10 @@ export const Header = () => {
   return (<div>
       <header className="relative z-50">
         <nav className="flex items-center justify-between py-6">
-          <div className="flex flex-1 items-center">
-            <a href="/" className="-m-1.5 p-1.5 pr-4">
-              <img className="h-8 w-auto" src="/favicon.ico" alt="" />
-            </a>
+            <a href="/" className="flex flex-1 items-center">
+              <img className="h-8 w-auto -m-1.5 p-1.5 pr-4" src="/favicon.ico" alt="" />
             <span>Tap Movies</span>
-          </div>
+            </a>
           <div className={"flex-1 items-center"}>
             <SearchBox />
           </div>

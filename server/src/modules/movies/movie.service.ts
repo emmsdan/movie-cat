@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {PaginateDto, PaginateOptions} from "src/types/Paginate.dto";
+import { Like, Repository } from 'typeorm';
 import { Movie } from './movie.entity';
 
 @Injectable()
@@ -10,8 +11,29 @@ export class MovieService {
     private movieRepository: Repository<Movie>,
   ) {}
 
-  findAll(): Promise<Movie[]> {
-    return this.movieRepository.find();
+  async findAll(query: PaginateOptions): Promise<PaginateDto<Movie>> {
+    const take = query.limit || 20;
+    const skip = Math.max(0, query.page - 1) * take;
+    const type = query.type || 'title';
+    const keyword = query.keyword || '';
+
+    const [result, total] = await this.movieRepository.findAndCount({
+      where: { [type]: Like('%' + keyword + '%') },
+      order: { [type]: 'DESC' },
+      take,
+      skip,
+    });
+
+    return {
+      result,
+      meta: {
+        total,
+        last: Math.ceil(total / take),
+        page: Math.ceil(skip / take) + 1,
+        limit: take,
+        next: skip + take,
+      },
+    };
   }
 
   findOne(id: number): Promise<Movie> {
