@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Label = ({ id, label }: { id: string; label: string }) => {
+export const Label = ({ id, label }: { id: string; label: string | React.ReactNode }) => {
   return (
     <label
       htmlFor={id}

@@ -2,8 +2,9 @@ import React from "react";
 
 export type ListProps = {
   items: Array<{ label: string; id?: string }>;
+  onSelect?: (item: { label: string; id?: string }) => void;
 };
-export const List = ({ items }: ListProps) => {
+export const List = ({ items, onSelect }: ListProps) => {
   return (
       items?.length === 0 ? null :
     <ul
@@ -19,6 +20,8 @@ export const List = ({ items }: ListProps) => {
           tabIndex={-1}
           id={item.id ?? "list-item-" + index}
           className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
+            key={item.id ?? "list-item-" + index}
+          onClick={() => onSelect?.(item) }
         >
           {item.label}
         </li>

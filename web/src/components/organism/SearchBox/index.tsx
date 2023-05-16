@@ -18,7 +18,7 @@ export const SearchBox = () => {
         placeholder="Search"
         icon={<SearchIcon />}
       />
-      <List items={[{label: "test"}]} />
+      <List items={[]} onSelect={console.log} />
     </section>
   );
 };
